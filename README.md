@@ -1,0 +1,43 @@
+# Open Screening Tools
+
+Free, private health screening questionnaires that score in the browser. Stage 1 of a larger project: no sign-up, no data storage, no longitudinal record.
+
+## What is included
+
+17 interactive tools: PHQ-9, PHQ-2, GAD-7, GAD-2, K10, WHO-5, PC-PTSD-5, ASRS-v1.1 (6Q), PHQ-15, EPDS, GDS-15, AUDIT, AUDIT-C, FTND, BMI, waist-to-height ratio and IPAQ-SF.
+
+8 tools are linked to their official source but not reproduced, because the owner needs to give permission, a trained examiner is needed, or checking is not finished: CRT6, SCAT6, SCOAT6, SMHAT-1/APSQ, LEAF-Q, AUSDRISK, STOP-Bang and SCOFF.
+
+## Privacy by design
+
+- Plain static files with no backend, no build step and no third-party code or fonts.
+- Answers are held in memory only. Nothing is written to cookies or any browser storage.
+- A Content Security Policy in `index.html` blocks all network connections (`connect-src 'none'`).
+- The print and FHIR JSON exports are created on the user's device.
+
+## Deploy on GitHub Pages
+
+1. Create a repository (for example `open-screening-tools`) and upload these files to the root, including `.nojekyll`.
+2. Go to **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`.
+3. Optional: add a custom domain or subdomain (for example `screening.susith.lk`) and turn on **Enforce HTTPS**.
+
+To preview locally, run `python3 -m http.server` in this folder and open http://localhost:8000.
+
+## Adding or editing a tool
+
+Every instrument is defined in `js/tools.js`. Before you add a tool:
+
+1. Confirm the licence allows free reproduction on a public website, and record the exact wording in `licence`.
+2. Copy the item wording and scoring from the original publication or the owner's official form.
+3. Add at least one verified DOI or official URL in `refs`, and a plain-language `METHOD` entry.
+4. If any item asks about self-harm or suicide, or very high scores need urgent follow-up, add a `crisis` rule.
+5. Add test cases to the scoring test and re-run it.
+6. Update the TGA self-assessment record.
+
+## Licences
+
+Website code: MIT (see `LICENSE`). The questionnaires are **not** covered by the code licence. Each one stays the property of its copyright holder and is used under the terms shown on its page and on the Sources page. Some instruments (WHO-5, AUDIT, K10, CRT6, SCAT6) allow non-commercial use only, so check them again before any commercial stage.
+
+## Disclaimer
+
+Screening only. Not a diagnosis, not medical advice and not a doctor's recommendation.
