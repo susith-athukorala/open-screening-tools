@@ -1,0 +1,168 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaireresponse"
+    ],
+    "tag": [
+      {
+        "system": "https://www.susith.lk/open-screening-tools/fhir/tags",
+        "code": "self-screening",
+        "display": "Self-completed screening - not a diagnosis"
+      }
+    ]
+  },
+  "questionnaire": "https://www.susith.lk/open-screening-tools/fhir/Questionnaire/phq9|0.1.0",
+  "status": "completed",
+  "authored": "2026-11-25T23:06:31.893Z",
+  "item": [
+    {
+      "linkId": "q1",
+      "text": "Little interest or pleasure in doing things",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6570-1",
+            "display": "More than half the days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q2",
+      "text": "Feeling down, depressed, or hopeless",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6570-1",
+            "display": "More than half the days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q3",
+      "text": "Trouble falling or staying asleep, or sleeping too much",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6570-1",
+            "display": "More than half the days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q4",
+      "text": "Feeling tired or having little energy",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6570-1",
+            "display": "More than half the days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q5",
+      "text": "Poor appetite or overeating",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6570-1",
+            "display": "More than half the days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q6",
+      "text": "Feeling bad about yourself — or that you are a failure or have let yourself or your family down",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q7",
+      "text": "Trouble concentrating on things, such as reading the newspaper or watching television",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q8",
+      "text": "Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q9",
+      "text": "Thoughts that you would be better off dead or of hurting yourself in some way",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6568-5",
+            "display": "Not at all"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "difficulty",
+      "text": "If you checked off any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6573-5",
+            "display": "Somewhat difficult"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "total",
+      "text": "PHQ-9 total score",
+      "answer": [
+        {
+          "valueInteger": 13
+        }
+      ]
+    },
+    {
+      "linkId": "interpretation",
+      "text": "Published score band (screening only, not a diagnosis)",
+      "answer": [
+        {
+          "valueString": "Moderate symptom range"
+        }
+      ]
+    }
+  ]
+}

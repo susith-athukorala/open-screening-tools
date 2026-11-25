@@ -301,15 +301,25 @@
     drawItems();
   }
 
-  /* ---------- FHIR export (generated and downloaded locally) ---------- */
+  /* ---------- FHIR export (generated and downloaded locally) ----------
+   * PHQ-9 and GAD-7 (pilot) export an SDC QuestionnaireResponse coded with LOINC,
+   * pointing at the published Questionnaire under /fhir/Questionnaire/. The receiving
+   * system adds QuestionnaireResponse.subject and can run SDC $extract to create an
+   * AU Core Diagnostic Result Observation. The website never adds a patient.
+   */
+  const FHIR_BASE = "https://www.susith.lk/open-screening-tools/fhir"; // keep in step with fhir-src/build.js
+
   function downloadFhir(tool, scored, r) {
-    const base = location.origin + location.pathname.replace(/index\.html$/, "");
+    const codes = (window.FHIR_CODES && window.FHIR_CODES.PILOT[tool.id]) || null;
     const qr = {
       resourceType: "QuestionnaireResponse",
+      meta: {
+        profile: codes ? ["http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaireresponse"] : undefined,
+        tag: [{ system: FHIR_BASE + "/tags", code: "self-screening", display: "Self-completed screening - not a diagnosis" }]
+      },
+      questionnaire: codes ? `${FHIR_BASE}/Questionnaire/${tool.id}|0.1.0` : undefined,
       status: "completed",
-      questionnaire: base + "fhir/Questionnaire/" + tool.id,
       authored: new Date().toISOString(),
-      meta: { tag: [{ system: base, code: "self-screening", display: "Self-completed screening – not a diagnosis" }] },
       item: []
     };
     if (tool.kind === "calc") {
@@ -318,16 +328,25 @@
         qr.item.push({ linkId: f.id, text: f.label, answer: [{ valueDecimal: Number(state.answers[f.id]) }] });
       });
     } else {
-      tool.items.forEach(i => {
+      const shown = visibleItems(tool);
+      shown.forEach(i => {
         const idx = state.answers[i.id];
         if (idx === undefined) return;
         const o = i.options[idx];
-        qr.item.push({ linkId: i.id, text: i.text, answer: [{ valueCoding: { code: String(o.value), display: o.label } }] });
+        let coding = { code: String(o.value), display: o.label };
+        if (codes) {
+          const list = i.id === "difficulty" ? window.FHIR_CODES.DIFFICULTY_ANSWERS : window.FHIR_CODES.FREQ_ANSWERS;
+          const hit = list.find(a => a.display === o.label);
+          if (hit) coding = { system: window.FHIR_CODES.LOINC, code: hit.code, display: hit.display };
+        }
+        qr.item.push({ linkId: i.id, text: i.text, answer: [{ valueCoding: coding }] });
       });
     }
-    qr.item.push({ linkId: "total", text: `${tool.name} result`, answer: [{ valueDecimal: Number(r.score) }] });
-    qr.item.push({ linkId: "interpretation", text: "Interpretation band", answer: [{ valueString: r.label }] });
-    const blob = new Blob([JSON.stringify(qr, null, 2)], { type: "application/fhir+json" });
+    const isInt = Number.isInteger(Number(r.score));
+    qr.item.push({ linkId: "total", text: `${tool.name} total score`, answer: [isInt && codes ? { valueInteger: Number(r.score) } : { valueDecimal: Number(r.score) }] });
+    qr.item.push({ linkId: "interpretation", text: "Published score band (screening only, not a diagnosis)", answer: [{ valueString: r.label }] });
+    const clean = JSON.parse(JSON.stringify(qr)); // drops undefined fields
+    const blob = new Blob([JSON.stringify(clean, null, 2)], { type: "application/fhir+json" });
     const url = URL.createObjectURL(blob);
     const a = h("a", { href: url, download: `${tool.id}-questionnaire-response.json` });
     document.body.appendChild(a); a.click(); a.remove();
@@ -403,6 +422,9 @@
         h("li", null, "Item wording and scoring are checked against the original source before release.")),
       h("h2", null, "For health professionals and educators"),
       h("p", null, "Each completed questionnaire can be downloaded as an HL7 FHIR R4 QuestionnaireResponse. The file is created on the user's device and is not sent anywhere. It is intended for teaching and for future interoperability work."),
+      h("p", null, "PHQ-9 and GAD-7 (pilot) follow the HL7 Structured Data Capture (SDC) specification. Their published Questionnaires use LOINC codes for questions, answers and total scores, and SNOMED CT observable-entity codes for the scores. Each includes an extraction template that produces an Observation shaped for AU Core Diagnostic Result Observation (v2.0.0). The patient is never added by this website; a receiving clinical system adds it before extraction. ",
+        h("a", { href: "fhir/index.json" }, "FHIR Questionnaire index"), "."),
+      h("p", { class: "muted" }, "LOINC® codes © Regenstrief Institute, Inc., available at no cost under the license at loinc.org/license. SNOMED CT® codes © SNOMED International; use in Australia is licensed through the National Clinical Terminology Service, and use elsewhere depends on the licence in your country."),
       h("p", null, "Corrections are welcome through the project's GitHub repository."));
   }
 
@@ -423,6 +445,11 @@
       case "about": renderAbout(); break;
       default: renderNotFound();
     }
+    document.querySelectorAll(".site-head nav a").forEach(a => {
+      const on = a.dataset.route === (parts[0] === "tool" ? "" : parts[0]);
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
     app.focus({ preventScroll: true });
   }
   window.addEventListener("hashchange", route);

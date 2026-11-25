@@ -1,0 +1,142 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaireresponse"
+    ],
+    "tag": [
+      {
+        "system": "https://www.susith.lk/open-screening-tools/fhir/tags",
+        "code": "self-screening",
+        "display": "Self-completed screening - not a diagnosis"
+      }
+    ]
+  },
+  "questionnaire": "https://www.susith.lk/open-screening-tools/fhir/Questionnaire/gad7|0.1.0",
+  "status": "completed",
+  "authored": "2026-11-25T23:06:32.895Z",
+  "item": [
+    {
+      "linkId": "q1",
+      "text": "Feeling nervous, anxious or on edge",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6571-9",
+            "display": "Nearly every day"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q2",
+      "text": "Not being able to stop or control worrying",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6571-9",
+            "display": "Nearly every day"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q3",
+      "text": "Worrying too much about different things",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q4",
+      "text": "Trouble relaxing",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q5",
+      "text": "Being so restless that it is hard to sit still",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q6",
+      "text": "Becoming easily annoyed or irritable",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "q7",
+      "text": "Feeling afraid as if something awful might happen",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6569-3",
+            "display": "Several days"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "difficulty",
+      "text": "If you checked off any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?",
+      "answer": [
+        {
+          "valueCoding": {
+            "system": "http://loinc.org",
+            "code": "LA6573-5",
+            "display": "Somewhat difficult"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "total",
+      "text": "GAD-7 total score",
+      "answer": [
+        {
+          "valueInteger": 11
+        }
+      ]
+    },
+    {
+      "linkId": "interpretation",
+      "text": "Published score band (screening only, not a diagnosis)",
+      "answer": [
+        {
+          "valueString": "Moderate anxiety symptom range"
+        }
+      ]
+    }
+  ]
+}

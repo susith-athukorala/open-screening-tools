@@ -34,6 +34,43 @@ Every instrument is defined in `js/tools.js`. Before you add a tool:
 5. Add test cases to the scoring test and re-run it.
 6. Update the TGA self-assessment record.
 
+## FHIR pilot: PHQ-9 and GAD-7
+
+```
+fhir/
+  index.json                      list of published Questionnaires
+  Questionnaire/phq9(.json)       SDC Questionnaire, LOINC + SNOMED CT coded, with an extraction template
+  Questionnaire/gad7(.json)
+  examples/*-questionnaire-response.json   sample exports from the site (anonymous)
+fhir-src/
+  codes.js                        verified codes (single source, also loaded by the site)
+  build.js                        regenerates fhir/Questionnaire/* from js/tools.js + codes.js
+tests/fhir.test.js                offline structure and extraction checks
+```
+
+**How it works:**
+1. The site exports an SDC QuestionnaireResponse. The answers are LOINC answer codes (for example LA6570-1), and `questionnaire` points to `.../fhir/Questionnaire/phq9|0.1.0`.
+2. The website never adds a patient. A receiving clinical system sets `QuestionnaireResponse.subject` to its own AU Core Patient.
+3. SDC `$extract` (for example CSIRO Smart Forms) applies the contained template and produces one Observation shaped for **AU Core Diagnostic Result Observation 2.0.0**:
+   - category `survey`
+   - code: LOINC 44261-6 / 70274-6 and SNOMED CT 720433000 / 445455005
+   - `valueQuantity` in `{score}`
+   - the published band as interpretation text
+   - `derivedFrom` pointing to the response
+
+**Codes deliberately not used:** SNOMED CT disorder or finding codes such as "moderate depression". A self-screen must not be recorded as a diagnosis.
+
+**If you host the site somewhere else:** change `FHIR_BASE` in both `fhir-src/build.js` and `js/app.js`, then run `node fhir-src/build.js`.
+
+**Check before production use:**
+
+```
+java -jar validator_cli.jar fhir/Questionnaire/phq9.json -version 4.0.1 -ig hl7.fhir.uv.sdc#4.0.0 -ig hl7.fhir.au.core#2.0.0
+node tests/fhir.test.js fhir/examples/*.json
+```
+
+Then load the Questionnaire into Smart Forms (smartforms.csiro.au) and test `$extract` with a test patient.
+
 ## Licences
 
 Website code: MIT (see `LICENSE`). The questionnaires are **not** covered by the code licence. Each one stays the property of its copyright holder and is used under the terms shown on its page and on the Sources page. Some instruments (WHO-5, AUDIT, K10, CRT6, SCAT6) allow non-commercial use only, so check them again before any commercial stage.

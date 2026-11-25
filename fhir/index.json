@@ -1,0 +1,15 @@
+{
+  "base": "https://www.susith.lk/open-screening-tools/fhir",
+  "questionnaires": [
+    {
+      "id": "phq9",
+      "url": "https://www.susith.lk/open-screening-tools/fhir/Questionnaire/phq9",
+      "title": "Patient Health Questionnaire-9 (depression)"
+    },
+    {
+      "id": "gad7",
+      "url": "https://www.susith.lk/open-screening-tools/fhir/Questionnaire/gad7",
+      "title": "Generalized Anxiety Disorder-7"
+    }
+  ]
+}
